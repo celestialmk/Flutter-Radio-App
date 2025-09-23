@@ -20,20 +20,24 @@ class CustomRadioListTile extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       onTap: onTap, //make content take max possible horizontal space
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: Image.network(
-          radio.image,
-          height: 40,
-          width: 40,
-          fit: BoxFit.cover,
-        ),
-      ),
+      leading: radio.image?.trim().isEmpty ?? true
+          ? const SizedBox(width: 44, height: 44)
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image.network(
+                radio.image!,
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
+                errorBuilder: (context, obj, _) =>
+                    const SizedBox(width: 44, height: 44),
+              ),
+            ),
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            radio.time,
+            radio.votes ?? "-",
             style: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
               color: isPlaying ? CustomColors.primary : null,
             ),
@@ -43,9 +47,9 @@ class CustomRadioListTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(radio.title),
+                Text(radio.title ?? "No title Available"),
                 Text(
-                  radio.subtitle,
+                  radio.subtitle ?? "No information available",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
